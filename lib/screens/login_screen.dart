@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_juntos_aprender/components/decoration_inputs_login.dart';
+import 'package:flutter_juntos_aprender/services/authService.dart';
 import 'package:flutter_juntos_aprender/utils/colors.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -12,6 +13,12 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   bool queroEntrar = true;
   final _formKey = GlobalKey<FormState>();
+
+  TextEditingController _emailController = TextEditingController();
+  TextEditingController _senhaController = TextEditingController();
+  TextEditingController _nomeController = TextEditingController();
+
+  AuthService _authService = AuthService();
 
   @override
   Widget build(BuildContext context) {
@@ -50,6 +57,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       SizedBox(height: 32),
                       TextFormField(
+                        controller: _emailController,
                         decoration: getLoginInputDecoration("E-mail"),
                         validator: (String? value) {
                           if (value == null) {
@@ -66,6 +74,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       const SizedBox(height: 8),
                       TextFormField(
+                        controller: _senhaController,
                         decoration: getLoginInputDecoration("Senha"),
                         validator: (String? value) {
                           if (value == null) {
@@ -99,6 +108,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                             const SizedBox(height: 8),
                             TextFormField(
+                              controller: _nomeController,
                               decoration: getLoginInputDecoration("Nome"),
                               validator: (String? value) {
                                 if (value == null) {
@@ -143,8 +153,19 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   buttonPrincipalPressed() {
+    String name = _nomeController.text;
+    String email = _emailController.text;
+    String password = _senhaController.text;
+
     if (_formKey.currentState!.validate()) {
-      print("Form válido");
+      if (queroEntrar) {
+        print("Entrada Válidada");
+      } else {
+        print("Cadastro Validado");
+        print(
+            "${_emailController.text}, ${_senhaController.text}, ${_nomeController.text} ");
+        _authService.register(name: name, password: password, email: email);
+      }
     } else {
       print("Form inválido");
     }
