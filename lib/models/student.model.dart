@@ -1,18 +1,24 @@
 class StudentModel {
-  String id;
+  String? id;
   String nome;
-  String data;
+  late DateTime data;
   String? urlImg;
+  String? id_class;
 
-  StudentModel({required this.id, required this.nome, required this.data});
+  StudentModel(
+      {this.id = null,
+      required this.nome,
+      required this.data,
+      this.urlImg = null,
+      this.id_class = null});
 
   StudentModel.fromMap(Map<String, dynamic> map)
-      : id = map["id"],
-        nome = map["nome"],
+      : nome = map["nome"],
         data = map["data"],
-        urlImg = map["urlImg"];
+        urlImg = map["urlImg"],
+        id_class = map["id_class"];
 
   Map<String, dynamic> toMap() {
-    return {"id": id, "nome": nome, "data": data, "urlImg": urlImg};
+    return {"nome": nome, "data": data, "urlImg": urlImg, "id_class": id_class};
   }
 }

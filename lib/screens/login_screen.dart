@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_juntos_aprender/components/decoration_inputs_login.dart';
-import 'package:flutter_juntos_aprender/services/authService.dart';
+import 'package:flutter_juntos_aprender/services/auth_service.dart';
 import 'package:flutter_juntos_aprender/utils/colors.dart';
+import 'package:flutter_juntos_aprender/utils/snackbar.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -160,11 +161,33 @@ class _LoginScreenState extends State<LoginScreen> {
     if (_formKey.currentState!.validate()) {
       if (queroEntrar) {
         print("Entrada Válidada");
+        _authService
+            .login(email: email, password: password)
+            .then((String? error) {
+          if (error != null) {
+            showSnackBar(context: context, texto: error);
+          }
+        });
       } else {
         print("Cadastro Validado");
         print(
             "${_emailController.text}, ${_senhaController.text}, ${_nomeController.text} ");
-        _authService.register(name: name, password: password, email: email);
+        _authService
+            .register(name: name, password: password, email: email)
+            .then(
+          (String? error) {
+            //Voltou com erro
+            if (error != null) {
+              showSnackBar(context: context, texto: error);
+            } else {
+              //Deu certo
+              showSnackBar(
+                  context: context,
+                  texto: "Cadastro realizado com sucesso!",
+                  isErro: false);
+            }
+          },
+        );
       }
     } else {
       print("Form inválido");

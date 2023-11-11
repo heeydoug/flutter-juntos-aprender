@@ -1,19 +1,21 @@
 class ClassroomModel {
-  String id;
+  String? id;
   String nomeSala;
-  String data;
+  late DateTime data;
   String? urlImg;
 
   ClassroomModel(
-      {required this.id, required this.nomeSala, required this.data});
+      {this.id = null,
+      required this.nomeSala,
+      required this.data,
+      this.urlImg = null});
 
   ClassroomModel.fromMap(Map<String, dynamic> map)
-      : id = map["id"],
-        nomeSala = map["nomeSala"],
+      : nomeSala = map["nomeSala"],
         data = map["data"],
         urlImg = map["urlImg"];
 
   Map<String, dynamic> toMap() {
-    return {"id": id, "nomeSala": nomeSala, "data": data, "urlImg": urlImg};
+    return {"nomeSala": nomeSala, "data": data, "urlImg": urlImg};
   }
 }
