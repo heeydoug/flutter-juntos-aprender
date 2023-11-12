@@ -165,7 +165,7 @@ class _LoginScreenState extends State<LoginScreen> {
       if (queroEntrar) {
         print("Entrada Válidada");
         _authService
-            .login(email: email, password: password)
+            .login(context: context, email: email, password: password)
             .then((String? error) {
           if (error != null) {
             showSnackBar(context: context, texto: error);

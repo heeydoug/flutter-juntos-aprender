@@ -1,4 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_juntos_aprender/screens/home_screen.dart';
+import 'package:flutter_juntos_aprender/screens/login_screen.dart';
+import 'package:flutter_juntos_aprender/utils/nav.dart';
 
 class AuthService {
   FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
@@ -21,17 +24,19 @@ class AuthService {
   }
 
   Future<String?> login(
-      {required String email, required String password}) async {
+      {context, required String email, required String password}) async {
     try {
       await _firebaseAuth.signInWithEmailAndPassword(
           email: email, password: password);
+      push(context, Home(), replace: true);
       return null;
     } on FirebaseAuthException catch (e) {
       return e.message;
     }
   }
 
-  Future<void> logout() async {
-    return _firebaseAuth.signOut();
+  void logout(context) {
+    _firebaseAuth.signOut();
+    push(context, LoginScreen(), replace: true);
   }
 }

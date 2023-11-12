@@ -52,7 +52,7 @@ class AppDrawer extends StatelessWidget {
             leading: Icon(Icons.logout, color: MyColors.roxo),
             title: Text('Logout'),
             onTap: () {
-              AuthService().logout();
+              AuthService().logout(context);
             },
           ),
         ],
