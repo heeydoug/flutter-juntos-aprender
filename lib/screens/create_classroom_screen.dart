@@ -1,6 +1,5 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_juntos_aprender/components/decoration_inputs.dart';
 import 'package:flutter_juntos_aprender/controllers/control_classroom.dart';
 import 'package:flutter_juntos_aprender/models/classroom_model.dart';
@@ -14,8 +13,10 @@ class CreateClassroomScreen extends StatefulWidget {
 
 class _CreateClassroomScreenState extends State<CreateClassroomScreen> {
   TextEditingController _nomeController = TextEditingController();
+  TextEditingController _quantidadeAlunosController = TextEditingController();
   late DateTime _data = DateTime.now();
   late String _fotoPath = '';
+  String _selectedTipoEnsino = 'Ensino Fundamental';
 
   late ControlClassRoom _controlClassRoom;
 
@@ -25,24 +26,30 @@ class _CreateClassroomScreenState extends State<CreateClassroomScreen> {
     _controlClassRoom = ControlClassRoom();
   }
 
-  _addClassroom(String nome, DateTime date, String urlImg) {
-    final newCLassroom =
-        ClassroomModel(nomeSala: nome, data: date, urlImg: urlImg);
-
-    _controlClassRoom.insert(newCLassroom);
+  _addClassroom(String nome, DateTime date, String urlImg,
+      String quantidadeAlunos, String selectedTipoEnsino) {
+    final newClassroom = ClassroomModel(
+      nomeSala: nome,
+      data: date,
+      urlImg: urlImg,
+      quantidadeAlunos: int.parse(quantidadeAlunos),
+      tipoEnsino: selectedTipoEnsino,
+    );
+    _controlClassRoom.insert(newClassroom);
     Navigator.of(context).pop();
   }
 
-  Future<void> _selectDataNascimento(BuildContext context) async {
+  Future<void> _selectData(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: DateTime.now(),
       firstDate: DateTime(1900),
       lastDate: DateTime.now(),
+      locale: Locale('pt', 'BR'),
     );
-    if (picked != null && picked != _data) {
+    if (picked != null) {
       setState(() {
-        _data = picked;
+        _data = picked.add(Duration(hours: 3));
       });
     }
   }
@@ -58,7 +65,6 @@ class _CreateClassroomScreenState extends State<CreateClassroomScreen> {
     }
   }
 
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -71,36 +77,18 @@ class _CreateClassroomScreenState extends State<CreateClassroomScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Stack(
-                alignment: Alignment.bottomRight,
-                children: [
-                  CircleAvatar(
-                    radius: 70,
-                    backgroundImage: _fotoPath.isNotEmpty
-                        ? FileImage(File(_fotoPath))
-                        : null,
-                    child: _fotoPath.isEmpty
-                        ? Icon(Icons.person, size: 50, color: Colors.white)
-                        : null,
-                  ),
-                  Container(
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: Colors.blue, // Substitua pela cor desejada
-                    ),
-                    child: IconButton(
-                      color: Colors.white,
-                      icon: Icon(Icons.camera_alt),
-                      onPressed: _selectFoto,
-                      tooltip: 'Selecionar Foto',
-                    ),
-                  ),
-                ],
+              SizedBox(height: 16.0),
+              TextField(
+                controller: _nomeController,
+                decoration: getInputDecoration('Nome'),
               ),
               SizedBox(height: 16.0),
               TextField(
-                  controller: _nomeController,
-                  decoration: getInputDecoration('Nome')),
+                controller: _quantidadeAlunosController,
+                decoration: getInputDecoration('Quantidade de Alunos'),
+                keyboardType: TextInputType.number,
+                inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+              ),
               SizedBox(height: 16.0),
               Row(
                 children: [
@@ -108,11 +96,11 @@ class _CreateClassroomScreenState extends State<CreateClassroomScreen> {
                     child: TextFormField(
                       readOnly: true,
                       controller: TextEditingController(
-                        text: _data != null
-                            ? DateFormat('dd/MM/yyyy').format(_data)
-                            : '',
+                        text: _data == null
+                            ? 'Nenhuma data selecionada!'
+                            : 'Data Selecionada: ${DateFormat('dd/MM/yyyy').format(_data)}',
                       ),
-                      onTap: () => _selectDataNascimento(context),
+                      onTap: () => _selectData(context),
                       decoration: getInputDecoration('Data de criação'),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
@@ -125,12 +113,40 @@ class _CreateClassroomScreenState extends State<CreateClassroomScreen> {
                 ],
               ),
               SizedBox(height: 16.0),
+              InputDecorator(
+                decoration: getInputDecoration('Tipo de Ensino'),
+                child: DropdownButton<String>(
+                  value: _selectedTipoEnsino,
+                  onChanged: (String? newValue) {
+                    setState(() {
+                      _selectedTipoEnsino = newValue!;
+                    });
+                  },
+                  items: <String>['Ensino Fundamental', 'Ensino Médio']
+                      .map<DropdownMenuItem<String>>((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value),
+                    );
+                  }).toList(),
+                ),
+              ),
+              SizedBox(height: 16.0),
               ElevatedButton(
                 onPressed: () {
                   print('Nome: ${_nomeController.text}');
+                  print(
+                      'Quantidade de Alunos: ${_quantidadeAlunosController.text}');
                   print('Data de criação: $_data');
                   print('Foto Path: $_fotoPath');
-                  _addClassroom(_nomeController.text, _data, _fotoPath);
+                  print('Tipo de Ensino: $_selectedTipoEnsino');
+                  _addClassroom(
+                    _nomeController.text,
+                    _data,
+                    _fotoPath,
+                    _quantidadeAlunosController.text,
+                    _selectedTipoEnsino,
+                  );
                 },
                 child: Text('Cadastrar'),
               ),
