@@ -10,7 +10,7 @@ InputDecoration getInputDecoration(String label) {
     border: OutlineInputBorder(borderRadius: BorderRadius.circular(64)),
     focusedBorder: OutlineInputBorder(
       borderRadius: BorderRadius.circular(64),
-      borderSide: const BorderSide(color: MyColors.azulTopGradiente, width: 4),
+      borderSide: const BorderSide(color: MyColors.roxo, width: 4),
     ),
     errorBorder: OutlineInputBorder(
       borderRadius: BorderRadius.circular(64),

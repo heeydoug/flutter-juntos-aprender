@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_juntos_aprender/components/app_bar.dart';
 import 'package:flutter_juntos_aprender/screens/home_screen.dart';
 import 'package:flutter_juntos_aprender/screens/manage_classroom_screen.dart';
 import 'package:flutter_juntos_aprender/screens/manage_students_screen.dart';
@@ -12,12 +13,10 @@ class AppDrawer extends StatelessWidget {
       child: ListView(
         padding: EdgeInsets.zero,
         children: <Widget>[
-          AppBar(
-            title: Text('Menu'),
-          ),
+          CustomAppBar(title: "Menu"),
           Divider(),
           ListTile(
-            leading: Icon(Icons.home, color: MyColors.azulTopGradiente),
+            leading: Icon(Icons.home, color: MyColors.roxo),
             title: Text('Home'),
             onTap: () {
               Navigator.pushReplacement(
@@ -28,8 +27,7 @@ class AppDrawer extends StatelessWidget {
           ),
           Divider(),
           ListTile(
-            leading: Icon(Icons.supervised_user_circle,
-                color: MyColors.azulTopGradiente),
+            leading: Icon(Icons.supervised_user_circle, color: MyColors.roxo),
             title: Text('Gerenciar Alunos'),
             onTap: () {
               Navigator.pushReplacement(
@@ -40,7 +38,7 @@ class AppDrawer extends StatelessWidget {
           ),
           Divider(),
           ListTile(
-            leading: Icon(Icons.class_, color: MyColors.azulTopGradiente),
+            leading: Icon(Icons.class_, color: MyColors.roxo),
             title: Text('Gerenciar Salas'),
             onTap: () {
               Navigator.pushReplacement(
@@ -51,7 +49,7 @@ class AppDrawer extends StatelessWidget {
           ),
           Divider(),
           ListTile(
-            leading: Icon(Icons.logout, color: MyColors.azulTopGradiente),
+            leading: Icon(Icons.logout, color: MyColors.roxo),
             title: Text('Logout'),
             onTap: () {
               AuthService().logout();

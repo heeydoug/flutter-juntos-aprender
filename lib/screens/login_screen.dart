@@ -130,6 +130,9 @@ class _LoginScreenState extends State<LoginScreen> {
                           buttonPrincipalPressed();
                         },
                         child: Text((queroEntrar) ? "Entrar" : "Cadastrar"),
+                        style: TextButton.styleFrom(
+                          backgroundColor: Colors.purple, // Cor do botão
+                        ),
                       ),
                       Divider(),
                       TextButton(

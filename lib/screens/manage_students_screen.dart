@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_juntos_aprender/components/app_bar.dart';
 import 'package:flutter_juntos_aprender/components/app_drawer.dart';
 import 'package:flutter_juntos_aprender/screens/create_student_screen.dart';
+import 'package:flutter_juntos_aprender/utils/colors.dart';
 
 class ManageStudents extends StatelessWidget {
   const ManageStudents({Key? key}) : super(key: key);
@@ -8,9 +10,7 @@ class ManageStudents extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Gerenciar Alunos'),
-      ),
+      appBar: CustomAppBar(title: 'Gerenciar Alunos'),
       drawer: AppDrawer(),
       body: ListView(
         children: [
@@ -32,6 +32,7 @@ class ManageStudents extends StatelessWidget {
           );
         },
         child: Icon(Icons.add),
+        backgroundColor: MyColors.roxo,
       ),
     );
   }

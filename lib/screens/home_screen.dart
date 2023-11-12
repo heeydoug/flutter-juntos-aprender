@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_juntos_aprender/components/app_bar.dart';
 import 'package:flutter_juntos_aprender/components/app_drawer.dart';
 
 class Home extends StatelessWidget {
@@ -7,7 +8,7 @@ class Home extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: Text("Juntos Aprender - Home")),
+        appBar: CustomAppBar(title: "Juntos Aprender - Home"),
         drawer: AppDrawer());
   }
 }
