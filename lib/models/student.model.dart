@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class StudentModel {
   String? id;
   String nome;
@@ -14,7 +16,7 @@ class StudentModel {
 
   StudentModel.fromMap(Map<String, dynamic> map)
       : nome = map["nome"],
-        data = map["data"],
+        data = (map["data"] as Timestamp).toDate(),
         urlImg = map["urlImg"],
         id_class = map["id_class"];
 
