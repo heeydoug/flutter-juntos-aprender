@@ -2,65 +2,37 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_juntos_aprender/components/app_bar.dart';
 import 'package:flutter_juntos_aprender/components/app_drawer.dart';
+import 'package:flutter_juntos_aprender/components/student_list.dart';
 import 'package:flutter_juntos_aprender/controllers/control_student.dart';
-import 'package:flutter_juntos_aprender/models/student.model.dart';
 import 'package:flutter_juntos_aprender/screens/create_student_screen.dart';
 import 'package:flutter_juntos_aprender/utils/colors.dart';
 
-class ManageStudents extends StatelessWidget {
+class ManageStudents extends StatefulWidget {
   const ManageStudents({Key? key}) : super(key: key);
+
+  @override
+  State<ManageStudents> createState() => _ManageStudentsState();
+}
+
+class _ManageStudentsState extends State<ManageStudents> {
+  late ControllStudent _controlStudent;
+
+  @override
+  initState() {
+    super.initState();
+    _controlStudent = ControllStudent();
+  }
+
+  _deleteStudent(int id) {
+    _controlStudent.deleteStudent(id);
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(title: 'Gerenciar Alunos'),
       drawer: AppDrawer(),
-      body: StreamBuilder(
-        stream: ControllStudent().stream,
-        builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-
-          if (snapshot.hasError) {
-            return Center(
-              child: Text('Error: ${snapshot.error}'),
-            );
-          }
-
-          if (snapshot.data?.docs.isEmpty ?? true) {
-            return Center(
-              child: Text('Você não possui alunos cadastrados.'),
-            );
-          }
-
-          return ListView.builder(
-            itemCount: snapshot.data?.docs.length,
-            itemBuilder: (context, index) {
-              var studentData =
-                  snapshot.data?.docs[index].data() as Map<String, dynamic>;
-              var studentModel = StudentModel.fromMap(studentData);
-
-              return Card(
-                elevation: 4,
-                margin: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-                child: ListTile(
-                  title: Text(
-                    studentModel.nome,
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                  ),
-                  subtitle: Text('teste'), // Substitua por informações do aluno
-                  onTap: () {
-                    // Adicione ação quando o aluno for selecionado
-                  },
-                ),
-              );
-            },
-          );
-        },
-      ),
+      body: _body(),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           // Navegar para a tela de cadastro de alunos
@@ -71,6 +43,38 @@ class ManageStudents extends StatelessWidget {
         },
         child: Icon(Icons.add),
         backgroundColor: MyColors.roxo,
+      ),
+    );
+  }
+
+  _body() {
+    return _stream_builder();
+  }
+
+  Container _stream_builder() {
+    return Container(
+      child: StreamBuilder<QuerySnapshot>(
+        stream: _controlStudent.stream,
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+          _controlStudent.getStudents(snapshot.data!);
+          return _scrollView();
+        },
+      ),
+    );
+  }
+
+  SingleChildScrollView _scrollView() {
+    return SingleChildScrollView(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: <Widget>[
+          StudentList(_controlStudent.students!, _deleteStudent)
+        ],
       ),
     );
   }

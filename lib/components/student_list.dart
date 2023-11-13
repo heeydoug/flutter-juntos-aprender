@@ -1,27 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_juntos_aprender/components/delete_dialog.dart';
-import 'package:flutter_juntos_aprender/models/classroom_model.dart';
+import 'package:flutter_juntos_aprender/models/student.model.dart';
 import 'package:flutter_juntos_aprender/utils/colors.dart';
 import 'package:flutter_juntos_aprender/utils/snackbar.dart';
 import 'package:intl/intl.dart';
 
-class ClassroomList extends StatelessWidget {
-  final List<ClassroomModel> _classrooms;
+class StudentList extends StatelessWidget {
+  final List<StudentModel> _students;
   final Function(int id) onRemove;
 
-  ClassroomList(this._classrooms, this.onRemove);
+  StudentList(this._students, this.onRemove);
 
   @override
   Widget build(BuildContext context) {
     //Componente pai para delimitar a area do ListView
     return Container(
       height: MediaQuery.of(context).size.height * 0.50,
-      child: _classrooms.isEmpty
+      child: _students.isEmpty
           ? Column(
               children: [
                 const SizedBox(height: 20),
                 Text(
-                  'Nenhuma sala cadastrada!',
+                  'Nenhum aluno cadastrada!',
                   style: TextStyle(color: MyColors.roxo),
                 ),
                 const SizedBox(height: 20),
@@ -36,11 +36,11 @@ class ClassroomList extends StatelessWidget {
             )
           : ListView.builder(
               //Quantidade de itens totais
-              itemCount: _classrooms.length,
+              itemCount: _students.length,
 
               //Metodo de criação de cada item
               itemBuilder: (ctx, index) {
-                final cl = _classrooms[index];
+                final st = _students[index];
                 return Card(
                   elevation: 5,
                   margin: EdgeInsets.symmetric(
@@ -54,28 +54,28 @@ class ClassroomList extends StatelessWidget {
                       child: Padding(
                         padding: const EdgeInsets.all(6),
                         child: FittedBox(
-                          child: Text(
-                            '${cl.quantidadeAlunos} \n Alunos',
-                            style: TextStyle(color: Colors.white),
-                            textAlign: TextAlign.center,
-                          ),
-                        ),
+                            // child: Text(
+                            //   '${st.quantidadeAlunos} \n Alunos',
+                            //   style: TextStyle(color: Colors.white),
+                            //   textAlign: TextAlign.center,
+                            // ),
+                            ),
                       ),
                     ),
                     title: Text(
-                      cl.nomeSala!,
+                      st.nome!,
                       style:
                           TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                     ),
                     subtitle: Text(
-                      'Data de Criação: ' +
-                          DateFormat('d MMM y').format(cl.data),
+                      'Data de Nascimento: ' +
+                          DateFormat('d MMM y').format(st.data),
                     ),
                     trailing: IconButton(
                       icon: Icon(Icons.delete),
                       color: Colors.red,
                       onPressed: (() => _showDeleteConfirmationDialog(
-                          context, cl.nomeSala, index)),
+                          context, st.nome, index)),
                     ),
                   ),
                 );
@@ -85,18 +85,18 @@ class ClassroomList extends StatelessWidget {
   }
 
   void _showDeleteConfirmationDialog(
-      BuildContext context, String nomeSala, int index) {
+      BuildContext context, String nome, int index) {
     showDialog(
       context: context,
       builder: (context) => DeleteDialog(
         title: 'Confirmar Exclusão',
-        content: 'Deseja realmente excluir a sala ' + nomeSala + ' ?',
+        content: 'Deseja realmente excluir o(a) aluno(a) ' + nome + ' ?',
         onCancel: () => Navigator.of(context).pop(),
         onConfirm: () {
           onRemove(index);
           showSnackBar(
               context: context,
-              texto: 'Sala excluída com sucesso!',
+              texto: 'Aluno excluído com sucesso!',
               isErro: false);
           Navigator.of(context).pop(); // Fecha a dialog
         },
