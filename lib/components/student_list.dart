@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_juntos_aprender/components/delete_dialog.dart';
 import 'package:flutter_juntos_aprender/models/student.model.dart';
+import 'package:flutter_juntos_aprender/screens/edit_student_screen.dart';
 import 'package:flutter_juntos_aprender/utils/colors.dart';
 import 'package:flutter_juntos_aprender/utils/snackbar.dart';
 import 'package:intl/intl.dart';
@@ -25,13 +26,6 @@ class StudentList extends StatelessWidget {
                   style: TextStyle(color: MyColors.roxo),
                 ),
                 const SizedBox(height: 20),
-                // SizedBox(
-                //   height: 200,
-                //   child: Image.asset(
-                //     'assets/images/waiting.png',
-                //     fit: BoxFit.cover,
-                //   ),
-                // ),
               ],
             )
           : ListView.builder(
@@ -71,6 +65,14 @@ class StudentList extends StatelessWidget {
                       'Data de Nascimento: ' +
                           DateFormat('d MMM y').format(st.data),
                     ),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => EditStudentScreen(student: st),
+                        ),
+                      );
+                    },
                     trailing: IconButton(
                       icon: Icon(Icons.delete),
                       color: Colors.red,

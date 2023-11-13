@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_juntos_aprender/components/delete_dialog.dart';
 import 'package:flutter_juntos_aprender/models/classroom_model.dart';
+import 'package:flutter_juntos_aprender/screens/edit_classroom_screen.dart';
 import 'package:flutter_juntos_aprender/utils/colors.dart';
 import 'package:flutter_juntos_aprender/utils/snackbar.dart';
 import 'package:intl/intl.dart';
@@ -25,13 +26,6 @@ class ClassroomList extends StatelessWidget {
                   style: TextStyle(color: MyColors.roxo),
                 ),
                 const SizedBox(height: 20),
-                // SizedBox(
-                //   height: 200,
-                //   child: Image.asset(
-                //     'assets/images/waiting.png',
-                //     fit: BoxFit.cover,
-                //   ),
-                // ),
               ],
             )
           : ListView.builder(
@@ -71,6 +65,15 @@ class ClassroomList extends StatelessWidget {
                       'Data de Criação: ' +
                           DateFormat('d MMM y').format(cl.data),
                     ),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              EditClassroomScreen(classroom: cl),
+                        ),
+                      );
+                    },
                     trailing: IconButton(
                       icon: Icon(Icons.delete),
                       color: Colors.red,

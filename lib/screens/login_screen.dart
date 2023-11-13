@@ -33,8 +33,8 @@ class _LoginScreenState extends State<LoginScreen> {
                       begin: Alignment.topCenter,
                       end: Alignment.bottomCenter,
                       colors: [
-                MyColors.azulTopGradiente,
-                MyColors.azulBaixoGradiente,
+                MyColors.topoGradiente,
+                MyColors.baixoGrandiente,
               ]))),
           Padding(
             padding: const EdgeInsets.all(16.0),
@@ -141,9 +141,22 @@ class _LoginScreenState extends State<LoginScreen> {
                             queroEntrar = !queroEntrar;
                           });
                         },
-                        child: Text((queroEntrar)
-                            ? "Ainda não possui uma conta? Cadastre-se!"
-                            : "Já tem uma conta? Entre!"),
+                        child: RichText(
+                          text: TextSpan(
+                            children: <TextSpan>[
+                              TextSpan(
+                                text: (queroEntrar)
+                                    ? "Ainda não possui uma conta? "
+                                    : "Já tem uma conta? ",
+                                style: TextStyle(color: Colors.white),
+                              ),
+                              TextSpan(
+                                text: (queroEntrar) ? "Cadastre-se!" : "Entre!",
+                                style: TextStyle(color: Colors.purple),
+                              ),
+                            ],
+                          ),
+                        ),
                       ),
                     ],
                   ),

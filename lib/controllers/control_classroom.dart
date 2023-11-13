@@ -32,4 +32,10 @@ class ControlClassRoom {
     DocumentSnapshot documentSnapshot = document_classrooms![index];
     documentSnapshot.reference.delete();
   }
+
+  void update(ClassroomModel updatedClassroom) {
+    DocumentReference docRef = _collection_classroom.doc(updatedClassroom
+        .id); // Assumindo que `id` é o identificador exclusivo da sala
+    docRef.update(updatedClassroom.toMap());
+  }
 }
