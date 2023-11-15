@@ -11,8 +11,11 @@ import 'package:intl/intl.dart';
 
 class EditClassroomScreen extends StatefulWidget {
   final ClassroomModel classroom;
+  final int index;
+  final Function(ClassroomModel classroomModel, int id) onUpdate;
 
-  EditClassroomScreen({required this.classroom});
+  EditClassroomScreen(
+      {required this.classroom, required this.index, required this.onUpdate});
 
   @override
   _EditClassroomScreenState createState() => _EditClassroomScreenState();
@@ -56,7 +59,7 @@ class _EditClassroomScreenState extends State<EditClassroomScreen> {
         tipoEnsino: selectedTipoEnsino,
       );
 
-      _controlClassRoom.update(editedClassroom);
+      widget.onUpdate(editedClassroom, widget.index);
       showSnackBar(
           context: context,
           texto: 'Sala atualizada com sucesso!',

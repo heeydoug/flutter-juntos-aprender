@@ -9,8 +9,11 @@ import 'package:intl/intl.dart';
 
 class EditStudentScreen extends StatefulWidget {
   final StudentModel student;
+  final int index;
+  final Function(StudentModel studentModel, int id) onUpdate;
 
-  EditStudentScreen({required this.student});
+  EditStudentScreen(
+      {required this.student, required this.index, required this.onUpdate});
 
   @override
   _EditStudentScreenState createState() => _EditStudentScreenState();
@@ -44,7 +47,7 @@ class _EditStudentScreenState extends State<EditStudentScreen> {
         urlImg: widget.student.urlImg,
       );
 
-      _controllStudent.update(editedStudent);
+      widget.onUpdate(editedStudent, widget.index);
       showSnackBar(
         context: context,
         texto: 'Alterações salvas com sucesso!',

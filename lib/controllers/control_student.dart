@@ -32,8 +32,8 @@ class ControllStudent {
     documentSnapshot.reference.delete();
   }
 
-  void update(StudentModel updatedStudent) {
-    DocumentReference docRef = _collection_student.doc(updatedStudent.id);
-    docRef.update(updatedStudent.toMap());
+  void update(StudentModel updatedStudent, int index) {
+    DocumentSnapshot documentSnapshot = document_students![index];
+    documentSnapshot.reference.update(updatedStudent.toMap());
   }
 }

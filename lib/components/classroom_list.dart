@@ -9,8 +9,9 @@ import 'package:intl/intl.dart';
 class ClassroomList extends StatelessWidget {
   final List<ClassroomModel> _classrooms;
   final Function(int id) onRemove;
+  final Function(ClassroomModel classroomModel, int id) onUpdate;
 
-  ClassroomList(this._classrooms, this.onRemove);
+  ClassroomList(this._classrooms, this.onRemove, this.onUpdate);
 
   @override
   Widget build(BuildContext context) {
@@ -69,8 +70,11 @@ class ClassroomList extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) =>
-                              EditClassroomScreen(classroom: cl),
+                          builder: (context) => EditClassroomScreen(
+                            classroom: cl,
+                            index: index,
+                            onUpdate: onUpdate,
+                          ),
                         ),
                       );
                     },

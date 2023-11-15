@@ -4,6 +4,7 @@ import 'package:flutter_juntos_aprender/components/app_bar.dart';
 import 'package:flutter_juntos_aprender/components/app_drawer.dart';
 import 'package:flutter_juntos_aprender/components/student_list.dart';
 import 'package:flutter_juntos_aprender/controllers/control_student.dart';
+import 'package:flutter_juntos_aprender/models/student.model.dart';
 import 'package:flutter_juntos_aprender/screens/create_student_screen.dart';
 import 'package:flutter_juntos_aprender/utils/colors.dart';
 
@@ -25,6 +26,10 @@ class _ManageStudentsState extends State<ManageStudents> {
 
   _deleteStudent(int id) {
     _controlStudent.deleteStudent(id);
+  }
+
+  _updateStudent(StudentModel studentModel, int id) {
+    _controlStudent.update(studentModel, id);
   }
 
   @override
@@ -73,7 +78,7 @@ class _ManageStudentsState extends State<ManageStudents> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
-          StudentList(_controlStudent.students!, _deleteStudent)
+          StudentList(_controlStudent.students!, _deleteStudent, _updateStudent)
         ],
       ),
     );

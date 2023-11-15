@@ -4,6 +4,7 @@ import 'package:flutter_juntos_aprender/components/app_bar.dart';
 import 'package:flutter_juntos_aprender/components/app_drawer.dart';
 import 'package:flutter_juntos_aprender/components/classroom_list.dart';
 import 'package:flutter_juntos_aprender/controllers/control_classroom.dart';
+import 'package:flutter_juntos_aprender/models/classroom_model.dart';
 import 'package:flutter_juntos_aprender/screens/create_classroom_screen.dart';
 import 'package:flutter_juntos_aprender/utils/colors.dart';
 
@@ -25,6 +26,10 @@ class _ManageClassroomState extends State<ManageClassroom> {
 
   _deleteClassroom(int id) {
     _controlClassRoom.deleteClassroom(id);
+  }
+
+  _updateStudent(ClassroomModel classroomModel, int id) {
+    _controlClassRoom.update(classroomModel, id);
   }
 
   @override
@@ -72,7 +77,8 @@ class _ManageClassroomState extends State<ManageClassroom> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
-          ClassroomList(_controlClassRoom.classrooms!, _deleteClassroom)
+          ClassroomList(
+              _controlClassRoom.classrooms!, _deleteClassroom, _updateStudent)
         ],
       ),
     );
