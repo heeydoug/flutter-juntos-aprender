@@ -15,7 +15,6 @@ class StudentList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    //Componente pai para delimitar a area do ListView
     return Container(
       height: MediaQuery.of(context).size.height * 0.50,
       child: _students.isEmpty
@@ -46,15 +45,10 @@ class StudentList extends StatelessWidget {
                     leading: CircleAvatar(
                       backgroundColor: MyColors.roxo,
                       radius: 30,
-                      child: Padding(
-                        padding: const EdgeInsets.all(6),
-                        child: FittedBox(
-                            // child: Text(
-                            //   '${st.quantidadeAlunos} \n Alunos',
-                            //   style: TextStyle(color: Colors.white),
-                            //   textAlign: TextAlign.center,
-                            // ),
-                            ),
+                      child: Icon(
+                        Icons.person,
+                        color: Colors.white,
+                        size: 30,
                       ),
                     ),
                     title: Text(
@@ -71,7 +65,10 @@ class StudentList extends StatelessWidget {
                         context,
                         MaterialPageRoute(
                           builder: (context) => EditStudentScreen(
-                              student: st, index: index, onUpdate: onUpdate),
+                            student: st,
+                            index: index,
+                            onUpdate: onUpdate,
+                          ),
                         ),
                       );
                     },

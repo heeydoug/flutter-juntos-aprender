@@ -17,7 +17,8 @@ class ClassroomModel {
       this.urlImg = null});
 
   ClassroomModel.fromMap(Map<String, dynamic> map)
-      : nomeSala = map["nomeSala"],
+      : id = map["id"],
+        nomeSala = map["nomeSala"],
         tipoEnsino = map["tipoEnsino"],
         quantidadeAlunos = map["quantidadeAlunos"],
         data = (map["data"] as Timestamp).toDate(),

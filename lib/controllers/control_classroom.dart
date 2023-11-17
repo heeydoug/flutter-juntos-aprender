@@ -19,6 +19,33 @@ class ControlClassRoom {
     }).toList();
   }
 
+  Future<List<ClassroomModel>> getAllClassroom() async {
+    QuerySnapshot<Map<String, dynamic>> querySnapshot =
+        await _collection_classroom.get();
+
+    List<ClassroomModel> classrooms = querySnapshot.docs
+        .map((e) => ClassroomModel.fromMap(e.data()))
+        .toList();
+
+    for (int i = 0; i < querySnapshot.docs.length; i++) {
+      var classroom = classrooms[i];
+      var docSnapshot = querySnapshot.docs[i];
+
+      // Associar o ID ao objeto ClassroomModel
+      classroom.id = docSnapshot.reference.id;
+
+      // print('ID: ${classroom.id}');
+      // print('Nome da Sala: ${classroom.nomeSala}');
+      // print('Tipo de Ensino: ${classroom.tipoEnsino}');
+      // print('Quantidade de Alunos: ${classroom.quantidadeAlunos}');
+      // print('Data: ${classroom.data}');
+      // print('URL da Imagem: ${classroom.urlImg ?? 'N/A'}');
+      // print('---');
+    }
+
+    return classrooms;
+  }
+
   void _insert_classroom(ClassroomModel classroomModel) {
     DocumentReference docref = _collection_classroom.doc();
     docref.set(classroomModel.toMap());
@@ -36,5 +63,22 @@ class ControlClassRoom {
   void update(ClassroomModel updatedClassroom, int index) {
     DocumentSnapshot documentSnapshot = document_classrooms![index];
     documentSnapshot.reference.update(updatedClassroom.toMap());
+  }
+
+  Future<int?> getIndexClassroom(String? classroomId) async {
+    print(classroomId);
+    if (classroomId == null) {
+      return null;
+    }
+
+    List<ClassroomModel> list = await getAllClassroom();
+
+    for (int i = 0; i < list.length; i++) {
+      if (list[i].id == classroomId) {
+        return i;
+      }
+    }
+
+    return null;
   }
 }

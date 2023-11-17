@@ -1,7 +1,10 @@
+import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_juntos_aprender/components/app_bar.dart';
 import 'package:flutter_juntos_aprender/components/decoration_inputs.dart';
+import 'package:flutter_juntos_aprender/controllers/control_classroom.dart';
 import 'package:flutter_juntos_aprender/controllers/control_student.dart';
+import 'package:flutter_juntos_aprender/models/classroom_model.dart'; // Importe o modelo de sala
 import 'package:flutter_juntos_aprender/models/student.model.dart';
 import 'package:flutter_juntos_aprender/utils/colors.dart';
 import 'package:flutter_juntos_aprender/utils/snackbar.dart';
@@ -23,6 +26,8 @@ class _EditStudentScreenState extends State<EditStudentScreen> {
   late TextEditingController _nomeController;
   late DateTime _dataNascimento;
   late ControllStudent _controllStudent;
+  List<ClassroomModel>? _classrooms;
+  ClassroomModel? selectedValue;
 
   @override
   void initState() {
@@ -30,6 +35,29 @@ class _EditStudentScreenState extends State<EditStudentScreen> {
     _controllStudent = ControllStudent();
     _nomeController = TextEditingController(text: widget.student.nome);
     _dataNascimento = widget.student.data;
+
+    // Carregar a lista de salas ao iniciar a tela
+    _loadClassrooms();
+    //
+    _findByIdClassrom();
+  }
+
+  Future<void> _loadClassrooms() async {
+    ControlClassRoom controlClassRoom = ControlClassRoom();
+    List<ClassroomModel> classrooms = await controlClassRoom.getAllClassroom();
+    setState(() {
+      _classrooms = classrooms;
+    });
+  }
+
+  Future<void> _findByIdClassrom() async {
+    if (widget.student.id_class != null) {
+      ControlClassRoom controlClassRoom = ControlClassRoom();
+      int index = await controlClassRoom
+          .getIndexClassroom(widget.student.id_class) as int;
+      selectedValue = _classrooms![index];
+    }
+    return;
   }
 
   _editStudent() {
@@ -45,6 +73,7 @@ class _EditStudentScreenState extends State<EditStudentScreen> {
         nome: _nomeController.text,
         data: _dataNascimento,
         urlImg: widget.student.urlImg,
+        id_class: selectedValue?.id,
       );
 
       widget.onUpdate(editedStudent, widget.index);
@@ -100,6 +129,52 @@ class _EditStudentScreenState extends State<EditStudentScreen> {
                           : 'Data de Nascimento: ${DateFormat('dd/MM/yyyy').format(_dataNascimento)}',
                     ),
                     decoration: getInputDecoration('Data de Nascimento'),
+                  ),
+                ),
+              ),
+              SizedBox(height: 16.0),
+              Container(
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.black),
+                  borderRadius: BorderRadius.circular(64),
+                ),
+                child: DropdownButtonHideUnderline(
+                  child: DropdownButton2<ClassroomModel>(
+                    isExpanded: true,
+                    hint: Text(
+                      'Selecione a sala do estudante: ',
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Theme.of(context).hintColor,
+                      ),
+                    ),
+                    items: _classrooms
+                        ?.map((ClassroomModel item) =>
+                            DropdownMenuItem<ClassroomModel>(
+                              value: item,
+                              child: Text(
+                                item.nomeSala,
+                                style: const TextStyle(
+                                  fontSize: 14,
+                                ),
+                              ),
+                            ))
+                        .toList(),
+                    value: selectedValue,
+                    onChanged: (ClassroomModel? item) {
+                      setState(() {
+                        selectedValue = item;
+                      });
+                      print(selectedValue?.id);
+                    },
+                    buttonStyleData: const ButtonStyleData(
+                      padding: EdgeInsets.symmetric(horizontal: 16),
+                      height: 50,
+                      width: 375,
+                    ),
+                    menuItemStyleData: const MenuItemStyleData(
+                      height: 40,
+                    ),
                   ),
                 ),
               ),

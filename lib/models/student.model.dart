@@ -20,15 +20,6 @@ class StudentModel {
         urlImg = map["urlImg"],
         id_class = map["id_class"];
 
-  // Map<String, dynamic> toMap() {
-  //   return {
-  //     "nome": nome,
-  //     "data": data,
-  //     "urlImg": urlImg,
-  //     "id_class": id_class,
-  //   };
-  // }
-
   Map<String, dynamic> toMap() {
     final Map<String, dynamic> data = Map<String, dynamic>();
     data['nome'] = this.nome;
