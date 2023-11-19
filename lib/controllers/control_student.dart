@@ -36,4 +36,17 @@ class ControllStudent {
     DocumentSnapshot documentSnapshot = document_students![index];
     documentSnapshot.reference.update(updatedStudent.toMap());
   }
+
+  Future<List<StudentModel>> getStudentsByIdClass(String idClass) async {
+    QuerySnapshot<Map<String, dynamic>> querySnapshot =
+        await _collection_student.where('id_class', isEqualTo: idClass).get();
+
+    List<StudentModel> studentsList = querySnapshot.docs
+        .map((DocumentSnapshot<Map<String, dynamic>> document) {
+      Map<String, dynamic> data = document.data()!;
+      return StudentModel.fromMap(data);
+    }).toList();
+
+    return studentsList;
+  }
 }

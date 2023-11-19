@@ -73,12 +73,14 @@ class _ManageStudentsState extends State<ManageStudents> {
     );
   }
 
-  SingleChildScrollView _scrollView() {
+  Widget _scrollView() {
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
-          StudentList(_controlStudent.students!, _deleteStudent, _updateStudent)
+          StudentList(
+              _controlStudent.students!, _deleteStudent, _updateStudent),
+          SizedBox(height: MediaQuery.of(context).viewInsets.bottom),
         ],
       ),
     );

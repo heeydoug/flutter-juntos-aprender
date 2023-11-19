@@ -33,14 +33,6 @@ class ControlClassRoom {
 
       // Associar o ID ao objeto ClassroomModel
       classroom.id = docSnapshot.reference.id;
-
-      // print('ID: ${classroom.id}');
-      // print('Nome da Sala: ${classroom.nomeSala}');
-      // print('Tipo de Ensino: ${classroom.tipoEnsino}');
-      // print('Quantidade de Alunos: ${classroom.quantidadeAlunos}');
-      // print('Data: ${classroom.data}');
-      // print('URL da Imagem: ${classroom.urlImg ?? 'N/A'}');
-      // print('---');
     }
 
     return classrooms;
@@ -70,9 +62,7 @@ class ControlClassRoom {
     if (classroomId == null) {
       return null;
     }
-
     List<ClassroomModel> list = await getAllClassroom();
-
     for (int i = 0; i < list.length; i++) {
       if (list[i].id == classroomId) {
         return i;
@@ -80,5 +70,10 @@ class ControlClassRoom {
     }
 
     return null;
+  }
+
+  Future<String?> getIdFromIndex(int index) async {
+    List<ClassroomModel> list = await getAllClassroom();
+    return list[index].id;
   }
 }

@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_juntos_aprender/components/app_bar.dart';
 import 'package:flutter_juntos_aprender/components/decoration_inputs.dart';
+import 'package:flutter_juntos_aprender/components/students_modal.dart';
 import 'package:flutter_juntos_aprender/controllers/control_classroom.dart';
+import 'package:flutter_juntos_aprender/controllers/control_student.dart';
 import 'package:flutter_juntos_aprender/models/classroom_model.dart';
+import 'package:flutter_juntos_aprender/models/student.model.dart';
 import 'package:flutter_juntos_aprender/utils/colors.dart';
 import 'package:flutter_juntos_aprender/utils/snackbar.dart';
 import 'package:image_picker/image_picker.dart';
@@ -29,11 +32,13 @@ class _EditClassroomScreenState extends State<EditClassroomScreen> {
   String _selectedTipoEnsino = 'Ensino Fundamental';
 
   late ControlClassRoom _controlClassRoom;
+  late ControllStudent _controlStudent;
 
   @override
   void initState() {
     super.initState();
     _controlClassRoom = ControlClassRoom();
+    _controlStudent = ControllStudent();
     _nomeController.text = widget.classroom.nomeSala!;
     _quantidadeAlunosController.text =
         widget.classroom.quantidadeAlunos.toString();
@@ -164,26 +169,52 @@ class _EditClassroomScreenState extends State<EditClassroomScreen> {
                   ),
                 ),
                 SizedBox(height: 16.0),
-                ElevatedButton(
-                  onPressed: () {
-                    print('Nome: ${_nomeController.text}');
-                    print(
-                        'Quantidade de Alunos: ${_quantidadeAlunosController.text}');
-                    print('Data de criação: $_data');
-                    print('Foto Path: $_fotoPath');
-                    print('Tipo de Ensino: $_selectedTipoEnsino');
-                    _editClassroom(
-                      _nomeController.text,
-                      _data,
-                      _fotoPath,
-                      _quantidadeAlunosController.text,
-                      _selectedTipoEnsino,
-                    );
-                  },
-                  child: Text('Salvar Alterações'),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: MyColors.roxo, // Background color
-                  ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment
+                      .spaceEvenly, // Ajusta o espaçamento entre os botões
+                  children: [
+                    ElevatedButton(
+                      onPressed: () async {
+                        String? idClass = await _controlClassRoom
+                            .getIdFromIndex(widget.index);
+                        List<StudentModel> students = await _controlStudent
+                            .getStudentsByIdClass(idClass!);
+
+                        // Mostra a modal com a lista de alunos
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return StudentsModal(students: students);
+                          },
+                        );
+                      },
+                      child: Text('Exibir Alunos da Sala'),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: MyColors.roxo,
+                      ),
+                    ),
+                    ElevatedButton(
+                      onPressed: () {
+                        print('Nome: ${_nomeController.text}');
+                        print(
+                            'Quantidade de Alunos: ${_quantidadeAlunosController.text}');
+                        print('Data de criação: $_data');
+                        print('Foto Path: $_fotoPath');
+                        print('Tipo de Ensino: $_selectedTipoEnsino');
+                        _editClassroom(
+                          _nomeController.text,
+                          _data,
+                          _fotoPath,
+                          _quantidadeAlunosController.text,
+                          _selectedTipoEnsino,
+                        );
+                      },
+                      child: Text('Salvar Alterações'),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: MyColors.roxo, // Background color
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),

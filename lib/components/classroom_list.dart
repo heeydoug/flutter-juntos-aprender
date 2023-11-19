@@ -17,7 +17,7 @@ class ClassroomList extends StatelessWidget {
   Widget build(BuildContext context) {
     //Componente pai para delimitar a area do ListView
     return Container(
-      height: MediaQuery.of(context).size.height * 0.50,
+      height: MediaQuery.of(context).size.height * 0.78,
       child: _classrooms.isEmpty
           ? Column(
               children: [
@@ -46,15 +46,10 @@ class ClassroomList extends StatelessWidget {
                     leading: CircleAvatar(
                       backgroundColor: MyColors.roxo,
                       radius: 30,
-                      child: Padding(
-                        padding: const EdgeInsets.all(6),
-                        child: FittedBox(
-                          child: Text(
-                            '${cl.quantidadeAlunos} \n Alunos',
-                            style: TextStyle(color: Colors.white),
-                            textAlign: TextAlign.center,
-                          ),
-                        ),
+                      child: Icon(
+                        Icons.home_filled,
+                        color: Colors.white,
+                        size: 30,
                       ),
                     ),
                     title: Text(
@@ -62,9 +57,18 @@ class ClassroomList extends StatelessWidget {
                       style:
                           TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                     ),
-                    subtitle: Text(
-                      'Data de Criação: ' +
-                          DateFormat('d MMM y').format(cl.data),
+                    subtitle: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Data de Criação: ' +
+                              DateFormat('d MMM y').format(cl.data),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          'Quantidade de Alunos: ${cl.quantidadeAlunos}',
+                        ),
+                      ],
                     ),
                     onTap: () {
                       Navigator.push(
